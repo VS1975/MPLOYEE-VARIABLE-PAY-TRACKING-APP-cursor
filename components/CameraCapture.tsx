@@ -75,13 +75,37 @@ export function CameraCapture({
       if (!ctx) throw new Error("Canvas unsupported");
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-      const capturedAt = new Date().toISOString();
-      const pad = 48;
-      ctx.fillStyle = "rgba(0,0,0,0.55)";
-      ctx.fillRect(0, canvas.height - pad, canvas.width, pad);
-      ctx.fillStyle = "#f8fafc";
-      ctx.font = `600 ${Math.max(14, Math.round(canvas.width * 0.028))}px system-ui, sans-serif`;
-      ctx.fillText(`Captured: ${capturedAt}`, 16, canvas.height - 18);
+      // const capturedAt = new Date().toISOString();
+      // const pad = 48;
+      // ctx.fillStyle = "rgba(0,0,0,0.55)";
+      // ctx.fillRect(0, canvas.height - pad, canvas.width, pad);
+      // ctx.fillStyle = "#f8fafc";
+      // ctx.font = `600 ${Math.max(14, Math.round(canvas.width * 0.028))}px system-ui, sans-serif`;
+      // ctx.fillText(`Captured: ${capturedAt}`, 16, canvas.height - 18);
+
+      // 1. Get the raw ISO string for the database
+const capturedAt = new Date().toISOString();
+
+// 2. Format the display string for the Indian timezone
+const displayTime = new Date().toLocaleString("en-IN", {
+  timeZone: "Asia/Kolkata",
+  hour12: true,
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+});
+
+const pad = 48;
+ctx.fillStyle = "rgba(0,0,0,0.55)";
+ctx.fillRect(0, canvas.height - pad, canvas.width, pad);
+ctx.fillStyle = "#f8fafc";
+ctx.font = `600 ${Math.max(14, Math.round(canvas.width * 0.028))}px system-ui, sans-serif`;
+
+// 3. Use 'displayTime' for the text on the image
+ctx.fillText(`Captured: ${displayTime}`, 16, canvas.height - 18);
 
       const rawBlob: Blob | null = await new Promise((res) =>
         canvas.toBlob((b) => res(b), "image/jpeg", 0.92)

@@ -79,9 +79,9 @@ export function EmployeeSubmissionForm() {
       fd.set("before_captured_at", before.capturedAt);
       fd.set("after_captured_at", after.capturedAt);
       // Replace this line:
-// fd.set("submitted_at", new Date().toISOString());
+      // fd.set("submitted_at", new Date().toISOString());
 
-// With this for a readable IST string:
+      // With this for a readable IST string:
       fd.set("submitted_at", new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }));
       fd.set("before_image", before.blob, "before.jpg");
       fd.set("after_image", after.blob, "after.jpg");
