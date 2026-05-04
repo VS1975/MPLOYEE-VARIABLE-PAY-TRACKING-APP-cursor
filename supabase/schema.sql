@@ -66,7 +66,7 @@ create table if not exists public.pay_config (
 );
 
 insert into public.pay_config (id, normal_pay_per_rack, bonus_threshold_racks, bonus_pay_per_rack)
-values (1, 5.00, 10, 8.00)
+values (1, 40.00, 10, 8.00)
 on conflict (id) do nothing;
 
 alter table public.pay_config enable row level security;

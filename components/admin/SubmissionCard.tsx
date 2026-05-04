@@ -36,19 +36,19 @@ export async function SubmissionCard({
           <p className="mb-1 text-xs font-semibold text-slate-600">Before</p>
           <SignedImage path={row.before_image_path} alt="Before" />
           <p className="mt-1 text-[11px] text-slate-500">
-            Device: {new Date(row.before_captured_at).toLocaleString()}
+            Device: {new Date(row.before_captured_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}
           </p>
         </div>
         <div>
           <p className="mb-1 text-xs font-semibold text-slate-600">After</p>
           <SignedImage path={row.after_image_path} alt="After" />
           <p className="mt-1 text-[11px] text-slate-500">
-            Device: {new Date(row.after_captured_at).toLocaleString()}
+            Device: {new Date(row.after_captured_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}
           </p>
         </div>
       </div>
       <p className="mt-3 text-[11px] text-slate-500">
-        Submitted (server): {new Date(row.submitted_at).toLocaleString()}
+        Submitted (server): {new Date(row.submitted_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}
       </p>
     </article>
   );
