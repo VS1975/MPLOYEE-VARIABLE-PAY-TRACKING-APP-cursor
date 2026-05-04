@@ -4,10 +4,16 @@ import { CameraCapture } from "@/components/CameraCapture";
 import { useState } from "react";
 
 function todayISODate() {
+  // Create a date object for the current moment
   const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
+  
+  // Convert to IST by adding 5.5 hours (5 * 60 + 30 minutes)
+  const istOffset = 5.5 * 60 * 60 * 1000;
+  const istDate = new Date(d.getTime() + istOffset);
+
+  const y = istDate.getUTCFullYear();
+  const m = String(istDate.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(istDate.getUTCDate()).padStart(2, "0");
   return `${y}-${m}-${day}`;
 }
 
@@ -72,7 +78,11 @@ export function EmployeeSubmissionForm() {
       fd.set("work_type", workType.trim());
       fd.set("before_captured_at", before.capturedAt);
       fd.set("after_captured_at", after.capturedAt);
-      fd.set("submitted_at", new Date().toISOString());
+      // Replace this line:
+// fd.set("submitted_at", new Date().toISOString());
+
+// With this for a readable IST string:
+      fd.set("submitted_at", new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }));
       fd.set("before_image", before.blob, "before.jpg");
       fd.set("after_image", after.blob, "after.jpg");
 
