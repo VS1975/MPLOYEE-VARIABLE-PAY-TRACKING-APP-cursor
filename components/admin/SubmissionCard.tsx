@@ -19,7 +19,7 @@ export async function SubmissionCard({
           </p>
           <p className="text-lg font-semibold text-slate-900">{row.employee_name}</p>
           {row.work_type && (
-            <p className="text-sm text-slate-600">Work type: {row.work_type}</p>
+            <p className="text-sm text-slate-600">Rack name: {row.work_type}</p>
           )}
         </div>
         <div className="text-right">

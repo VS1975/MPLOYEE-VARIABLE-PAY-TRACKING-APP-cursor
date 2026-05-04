@@ -3,6 +3,14 @@
 import { CameraCapture } from "@/components/CameraCapture";
 import { useState } from "react";
 
+function toISOTimeInIST(date: Date): string {
+  // Convert to IST (UTC+5:30)
+  const istOffset = 5.5 * 60 * 60 * 1000;
+  const istTime = new Date(date.getTime() + istOffset);
+  // Format as ISO string with explicit +05:30 offset
+  return istTime.toISOString().replace('Z', '+05:30');
+}
+
 function todayISODate() {
   // Create a date object for the current moment
   const d = new Date();
@@ -78,11 +86,8 @@ export function EmployeeSubmissionForm() {
       fd.set("work_type", workType.trim());
       fd.set("before_captured_at", before.capturedAt);
       fd.set("after_captured_at", after.capturedAt);
-      // Replace this line:
-      // fd.set("submitted_at", new Date().toISOString());
-
-      // With this for a readable IST string:
-      fd.set("submitted_at", new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }));
+      // Use ISO timestamp - server will handle timezone
+      fd.set("submitted_at", new Date().toISOString());
       fd.set("before_image", before.blob, "before.jpg");
       fd.set("after_image", after.blob, "after.jpg");
 
@@ -178,11 +183,11 @@ export function EmployeeSubmissionForm() {
           />
         </label>
         <label className="grid gap-1 text-sm font-medium text-slate-800">
-          Work type <span className="font-normal text-slate-500">(optional)</span>
+          Rack name <span className="font-normal text-slate-500">(e.g. A01-06)</span>
           <input
             value={workType}
             onChange={(e) => setWorkType(e.target.value)}
-            placeholder="e.g. Restock, pick, audit"
+            placeholder="e.g. A01-06"
             className="rounded-xl border border-slate-200 px-3 py-3 text-base outline-none ring-blue-500/30 focus:ring-4"
           />
         </label>

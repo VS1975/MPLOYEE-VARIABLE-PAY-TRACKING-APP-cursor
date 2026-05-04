@@ -9,10 +9,10 @@ type Props = {
 };
 
 export function ExportPanel({ employeeId, from, to }: Props) {
-  const [busy, setBusy] = useState<"csv" | "pdf" | null>(null);
+  const [busy, setBusy] = useState<"excel" | "pdf" | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const download = async (kind: "csv" | "pdf") => {
+  const download = async (kind: "excel" | "pdf") => {
     setError(null);
     setBusy(kind);
     try {
@@ -57,10 +57,10 @@ export function ExportPanel({ employeeId, from, to }: Props) {
           <button
             type="button"
             disabled={busy !== null}
-            onClick={() => download("csv")}
+            onClick={() => download("excel")}
             className="rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
           >
-            {busy === "csv" ? "Preparing…" : "Download CSV"}
+            {busy === "excel" ? "Preparing…" : "Download Excel"}
           </button>
           <button
             type="button"
