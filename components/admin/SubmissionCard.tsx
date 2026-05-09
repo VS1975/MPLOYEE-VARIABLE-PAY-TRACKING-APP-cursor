@@ -1,7 +1,11 @@
+"use client";
+
 import { SignedImage } from "@/components/admin/SignedImage";
 import type { SubmissionRow } from "@/lib/types";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-export async function SubmissionCard({
+export function SubmissionCard({
   row,
   payAmount,
   payLabel,
@@ -10,6 +14,36 @@ export async function SubmissionCard({
   payAmount: number;
   payLabel: string;
 }) {
+  const router = useRouter();
+  const [deleting, setDeleting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleDelete = async () => {
+    if (!confirm("Are you sure you want to delete this submission? This action cannot be undone.")) {
+      return;
+    }
+
+    setDeleting(true);
+    setError(null);
+
+    try {
+      const res = await fetch(`/api/admin/submissions/${row.id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}));
+        throw new Error(json.error || "Failed to delete");
+      }
+
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Delete failed");
+      setDeleting(false);
+    }
+  };
+
   return (
     <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
       <div className="flex flex-wrap items-start justify-between gap-3 border-b border-slate-100 pb-3">
@@ -47,9 +81,23 @@ export async function SubmissionCard({
           </p>
         </div>
       </div>
-      <p className="mt-3 text-[11px] text-slate-500">
-        Submitted (server): {new Date(row.submitted_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}
-      </p>
+      <div className="mt-3 flex items-center justify-between">
+        <p className="text-[11px] text-slate-500">
+          Submitted (server): {new Date(row.submitted_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}
+        </p>
+        <div className="flex items-center gap-2">
+          {error && (
+            <span className="text-xs text-red-600">{error}</span>
+          )}
+          <button
+            onClick={handleDelete}
+            disabled={deleting}
+            className="rounded-lg border border-red-200 px-3 py-1.5 text-xs font-medium text-red-700 hover:bg-red-50 disabled:opacity-50"
+          >
+            {deleting ? "Deleting…" : "Delete"}
+          </button>
+        </div>
+      </div>
     </article>
   );
 }
